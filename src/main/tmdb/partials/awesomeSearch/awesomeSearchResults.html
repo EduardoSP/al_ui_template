@@ -1,8 +1,14 @@
 <div class="awesome-search-results">
 	<div class="container">
 		<div ng-repeat="result in resultList" 
-		class="col-xs-3">
-			<a href="#{{result.id}}" data-toggle="modal" data-target="#{{result.id}}" ng-click="setCurrentMovie(result.id)">
+		class="col-xs-3" ng-class= "{'buena': (result.popularity > 2.5) , 'mala':(result.popularity < 2.5)}   ">
+		<!--
+				<div ng-repeat="result in resultList" 
+				class="col-xs-3" ng-class = "{'buena': buena , 'mala':buena}   "
+				ng-mouseenter="buena = true " ng-mouseleave="buena = false"  
+				>
+		-->
+			<a href="#{{result.id}}" data-toggle="modal" data-target="#{{result.id}}" ng-click="setCurrentMovie(result.id, result.media_type)">
 			<img ng-src="{{result.foto}}" title="{{result.title}} as {{result.character}}" width="65" height="97" ng-if="result.foto" />
 			</a>
 			<span class="badge">{{result.media_type}}</span>
@@ -12,9 +18,20 @@
 			
 		</div>
 
-		<!-- <movie-trailer ng-repeat="movie in resultList track by $index" ng-model="currentMovie"> </movie-trailer> -->
+		<div ng-switch = "media_type">
+			<div ng-switch-when="person">
+		  		 <modal-actor ng-model="currentMovie"></modal-actor>
+		  	</div>
+		  	<div ng-switch-when="movie">
+		  		<movie-trailer ng-model="currentMovie"> </movie-trailer>
+		 	 </div>
+		  	<div ng-switch-when="tv">
+		   	<!--tv-->
+		  		<movie-trailer ng-model="currentMovie"> </movie-trailer>
+		 	 </div>
+		</div>
 
-		<movie-trailer ng-model="currentMovie"> </movie-trailer>
+		
 
 	</div>
 </div>	

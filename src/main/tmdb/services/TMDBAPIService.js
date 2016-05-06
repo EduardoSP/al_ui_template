@@ -26,6 +26,19 @@ define( [ 'angular',
         var TMDBAPIService = function ( $rootScope, $http, $timeout, $resource, localStorageService, $location ) {
 
             this.ServiceCache = [];
+            
+            this.getConfiguration = function() {
+                var req = {
+                    method: "GET",
+                    url: apiBaseUrl + "/configuration",
+                    params: {
+                        api_key: apiKey
+                    }
+                };
+
+                return $http( req );
+            };
+
 
             /* http://docs.themoviedb.apiary.io/reference/discover */
             /*

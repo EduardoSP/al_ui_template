@@ -25,7 +25,7 @@ define( [ 'angular',
 
         var YearController = function($scope, TMDBAPIService) {
 
-            //console.log($scope.yearMovie);
+            console.log($scope.yearMovie);
 
             var yearMovieArray = $scope.yearMovie.split("-");
             $scope.yearMovie = parseInt(yearMovieArray[0]);

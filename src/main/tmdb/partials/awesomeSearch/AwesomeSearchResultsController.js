@@ -23,8 +23,9 @@ define( [ 'angular',
 
         var AwesomeSearchResultsController = function($scope, TMDBAPIService ) {
         	$scope.currentMovie = 0;
-        	$scope.setCurrentMovie = function(id) {
-                 $scope.currentMovie = id;   
+        	$scope.setCurrentMovie = function(id, media_type) {
+                 $scope.currentMovie = id;
+                 $scope.media_type = media_type;   
           };
         };
 

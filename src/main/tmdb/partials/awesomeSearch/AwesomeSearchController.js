@@ -17,11 +17,12 @@
 
 define( [ 'angular',
           'config/config',
-          'tmdb/services/TMDBAPIService'],
+          'tmdb/services/TMDBAPIService',
+          'LocalStorageModule'],
     function( angular, config, TMDBAPIService ) {
         "use strict";
 
-        var AwesomeSearchController = function($scope, TMDBAPIService, $timeout ) {
+        var AwesomeSearchController = function($scope,$rootScope, TMDBAPIService, $timeout, localStorage ) {
             //Reference variables
             var self = this;
             var apiSearch = TMDBAPIService.Search();
@@ -33,10 +34,25 @@ define( [ 'angular',
             var config  = angular.module("config");
             var defaultImage = "https://simpleicon.com/wp-content/uploads/movie-1.png";
 
+            var configuration = localStorage.get( "config") ;
+            if (configuration == null)
+            {
+                 console.log("Route changed; looking for configuration data" );
+                TMDBAPIService.getConfiguration()
+                    .then(  function( configResponse ) {
+                                configuration = configResponse.data;
+                                console.log("Got response!", configResponse );
+                                localStorage.set("config", configuration);
+                            }, function( reason ) {
+                                console.log("FAIL!", reason );
+                            } );
+                console.log("Configuration: ", configuration );
+                
+            }
             $scope.searchPhrase = "";
 
             $scope.$watch('searchPhrase',function(newValue,oldValue){
-                console.log("newValue="+newValue+",oldValue="+oldValue);
+                //console.log("newValue="+newValue+",oldValue="+oldValue);
             
                 $timeout.cancel(searchPromise);
 
@@ -92,6 +108,7 @@ define( [ 'angular',
                             $scope.searchResults = response.data.results;
 
                             $scope.searchResults.forEach(function(item){
+                                
                                 if (item.media_type === "person") {
                                     // Get images for persons 
                                     apiPerson.person.person(item.id).then( function(r) {
@@ -111,7 +128,7 @@ define( [ 'angular',
 
         };
 
-        AwesomeSearchController.$inject = [ '$scope', 'TMDBAPIService', '$timeout' ];
+        AwesomeSearchController.$inject = [ '$scope', '$rootScope', 'TMDBAPIService', '$timeout' , 'localStorageService'];
 
         return AwesomeSearchController;
     }
